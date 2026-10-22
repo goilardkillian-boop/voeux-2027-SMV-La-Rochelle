@@ -48,14 +48,20 @@ main:focus, section[tabindex="-1"]:focus { outline: none; } /* cibles des liens 
 .split-line { overflow: hidden; padding-bottom: .06em; }
 
 /* ---------- Barre haute ---------- */
-.topbar { position: fixed; inset: 0 0 auto 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 14px var(--gutter); color: var(--white); transition: background-color .4s, color .4s; }
-.topbar.is-scrolled { background: rgba(45, 62, 115, .96); }
+/* Fond bleu foncé dès l'ouverture : sans lui, les liens blancs passaient sur le motif vert (1,3:1) */
+.topbar { position: fixed; inset: 0 0 auto 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 14px var(--gutter); color: var(--white); background: rgba(45, 62, 115, .96); transition: background-color .4s, color .4s; }
 .topbar.is-solid { background: rgba(255, 255, 255, .94); color: var(--navy); box-shadow: 0 1px 0 rgba(45, 62, 115, .12); }
 .topbar__brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-family: var(--font-titre); font-weight: 800; font-size: 16px; letter-spacing: .04em; text-transform: uppercase; }
 .topbar__nav { display: flex; gap: 26px; font-family: var(--font-titre); font-weight: 700; font-size: 15px; letter-spacing: .06em; text-transform: uppercase; }
 .topbar__nav a { text-decoration: none; position: relative; }
 .topbar__nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -4px; height: 3px; background: var(--vert); transform: scaleX(0); transform-origin: left; transition: transform .35s var(--ease-out); }
 .topbar__nav a:hover::after, .topbar__nav a:focus-visible::after { transform: scaleX(1); }
+.topbar__droite { display: flex; align-items: center; gap: 26px; }
+.topbar__son { display: inline-flex; align-items: center; gap: 6px; background: transparent; color: inherit; border: 2px solid currentColor; padding: 6px 10px 5px 8px; font: 700 13px/1 var(--font-titre); letter-spacing: .08em; text-transform: uppercase; cursor: pointer; transition: background-color .25s, color .25s, border-color .25s; }
+.topbar__son svg { width: 18px; height: 18px; }
+.topbar__son .topbar__ondes { opacity: 0; transition: opacity .25s; }
+.topbar__son[aria-pressed="true"] { background: var(--vert); border-color: var(--vert); color: var(--navy); }
+.topbar__son[aria-pressed="true"] .topbar__ondes { opacity: 1; }
 @media (max-width: 760px) { .topbar__nav { display: none; } }
 
 /* ---------- Motif camouflage ---------- */
@@ -71,16 +77,24 @@ main:focus, section[tabindex="-1"]:focus { outline: none; } /* cibles des liens 
 .hero__inner { position: relative; text-align: center; display: flex; flex-direction: column; align-items: center; }
 /* Charte « à plat » : pas d'ombre portée sous l'insigne */
 .hero__insigne { width: clamp(80px, min(11vw, 15svh), 150px); margin-bottom: clamp(16px, 2.4vw, 30px); position: relative; }
-.hero__insigne::after { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, .75) 50%, transparent 65%); background-size: 250% 100%; background-position: 150% 0; -webkit-mask: url("../img/logos/insigne_3rsmv.png") center / contain no-repeat; mask: url("../img/logos/insigne_3rsmv.png") center / contain no-repeat; }
+.hero__insigne::after { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, .75) 50%, transparent 65%); background-size: 250% 100%; background-position: 150% 0; -webkit-mask: url("../img/logos/insigne_3rsmv_300.webp") center / contain no-repeat; mask: url("../img/logos/insigne_3rsmv_300.webp") center / contain no-repeat; }
 .hero__insigne.is-shine::after { animation: shine 1.4s var(--ease-out) forwards; }
 @keyframes shine { to { background-position: -60% 0; } }
-.hero__kicker { font-family: var(--font-titre); font-weight: 700; font-size: clamp(13px, 1.5vw, 20px); letter-spacing: .1em; text-transform: uppercase; color: var(--bleu-clair); margin: 0 0 clamp(10px, 1.4vw, 18px); text-wrap: balance; }
+.hero__pour { margin: 0 0 14px; max-width: 100%; font: 800 clamp(13px, 1.5vw, 19px)/1.15 var(--font-titre); letter-spacing: .06em; text-transform: uppercase; color: var(--navy); background: var(--vert); padding: .5em .65em .42em; text-wrap: balance; }
+.hero__skip { position: absolute; right: var(--gutter); bottom: 28px; z-index: 5; font: 700 13px/1 var(--font-titre); letter-spacing: .1em; text-transform: uppercase; color: var(--white); background: transparent; border: 2px solid rgba(255, 255, 255, .45); padding: 10px 14px 9px; cursor: pointer; transition: border-color .25s; }
+.hero__skip:hover { border-color: var(--white); }
+.hero__skip span { color: var(--vert); }
+/* Bleu clair (3,99:1) seulement quand le sur-titre est « grand » au sens WCAG (≥ 18,66 px gras) ; sinon blanc */
+.hero__kicker { font-family: var(--font-titre); font-weight: 700; font-size: clamp(13px, 1.5vw, 20px); letter-spacing: .1em; text-transform: uppercase; color: var(--white); margin: 0 0 clamp(10px, 1.4vw, 18px); text-wrap: balance; }
+@media (min-width: 1280px) { .hero__kicker { color: var(--bleu-clair); } }
 .hero__title { margin: 0; font-family: var(--font-titre); font-weight: 800; text-transform: uppercase; line-height: .9; font-size: clamp(40px, min(14vw, 13.5svh), 150px); letter-spacing: -.015em; }
 .hero__visual, .hero__line { display: block; }
 .hero__line--row { display: flex; align-items: baseline; justify-content: center; gap: .22em; flex-wrap: wrap; }
 .year { color: var(--vert); display: inline-flex; }
 .odo { display: inline-block; height: .9em; overflow: hidden; vertical-align: top; }
 .odo__reel { display: flex; flex-direction: column; line-height: .9; transform: translateY(-50%); } /* 2027 par défaut */
+/* Le « 6 » n'est visible que pendant la bascule de l'intro : sinon son arrondi bas dépasse d'un pixel au-dessus du « 7 » */
+.odo__reel > span:first-child { visibility: hidden; }
 .hero__sub { margin: clamp(14px, 2vw, 26px) 0 0; font-size: clamp(17px, 1.6vw, 24px); font-weight: 500; max-width: 34ch; text-wrap: balance; }
 .hero__cue { position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 10px; color: var(--white); text-decoration: none; font-family: var(--font-titre); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: 13px; }
 .hero__cue i { width: 2px; height: 46px; background: rgba(255, 255, 255, .25); position: relative; overflow: hidden; }
@@ -130,6 +144,9 @@ main:focus, section[tabindex="-1"]:focus { outline: none; } /* cibles des liens 
 .card__media img { object-fit: cover; transform: scale(1.18); background-size: cover; transition: filter .4s; }
 .card:hover .card__media img { filter: saturate(1.08) contrast(1.04); }
 .card__count { position: absolute; right: 12px; bottom: 12px; background: var(--navy); color: var(--white); font: 800 14px/1 var(--font-titre); padding: 7px 9px 6px; letter-spacing: .04em; }
+/* Repère « 10 ans du régiment » : étiquette sur la photo et date inversée (bleu foncé sur vert → vert sur bleu foncé) */
+.card__flag { position: absolute; left: 12px; top: 12px; z-index: 2; pointer-events: none; background: var(--vert); color: var(--navy); font: 800 12px/1 var(--font-titre); letter-spacing: .06em; text-transform: uppercase; padding: 6px 9px 5px; }
+.card--10ans .card__date { background: var(--navy); color: var(--vert); }
 .card__placeholder { position: absolute; inset: 0; display: grid; place-items: center; background: var(--navy); }
 .card__placeholder img { width: 38%; height: auto; transform: none; filter: brightness(0) invert(1); opacity: .9; }
 .card__meta { margin: 18px 0 6px; }
@@ -160,6 +177,8 @@ main:focus, section[tabindex="-1"]:focus { outline: none; } /* cibles des liens 
 .camo--d { left: calc(var(--camo-w) * -0.42); bottom: calc(var(--camo-w) * -0.38); transform: rotate(14deg); }
 .camo--e { right: calc(var(--camo-w) * -0.46); top: calc(var(--camo-w) * -0.42); transform: rotate(190deg); }
 .final__inner { position: relative; display: flex; flex-direction: column; align-items: center; }
+/* Trame interactive : ce calque ne dessine que les points agrandis autour du pointeur, par-dessus la trame du motif */
+.camo__points { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .final__year { margin: 0 0 .06em; font-family: var(--font-titre); font-weight: 800; font-size: clamp(96px, 22vw, 320px); line-height: .85; color: var(--vert); letter-spacing: -.03em; }
 .final__text { font-size: clamp(19px, 1.8vw, 26px); max-width: 36ch; margin: 0 0 clamp(36px, 5vw, 60px); text-wrap: pretty; }
 .final__logo { width: clamp(220px, 26vw, 360px); margin-bottom: 44px; }
@@ -179,20 +198,54 @@ main:focus, section[tabindex="-1"]:focus { outline: none; } /* cibles des liens 
 .footer__small { width: 100%; opacity: .7; font-size: 13px; }
 
 /* ---------- Lightbox ---------- */
-.lightbox { width: min(1180px, 94vw); max-height: 92vh; padding: 0; border: 0; background: var(--white); color: var(--ink); display: none; grid-template-columns: 1.4fr 1fr; overflow: hidden; }
+/* Le fond blanc est un calque (::before) pour pouvoir l'effacer pendant la transition Flip */
+.lightbox { width: min(1180px, 94vw); max-height: 92vh; padding: 0; border: 0; background: transparent; color: var(--ink); display: none; grid-template-columns: 1.4fr 1fr; overflow: hidden; }
+.lightbox::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--white); transition: opacity .3s; }
 .lightbox[open] { display: grid; }
-.lightbox::backdrop { background: rgba(20, 28, 55, .86); }
-.lightbox__media { background: var(--navy); display: grid; gap: 4px; overflow-y: auto; overscroll-behavior: contain; max-height: 92vh; }
-.lightbox__media img { width: 100%; height: auto; background-size: cover; } /* aperçu flou (LQIP) étiré, pas en mosaïque */
+/* Fond qui s'assombrit à l'ouverture ; sans @starting-style (anciens navigateurs), il apparaît directement */
+.lightbox::backdrop { background-color: rgba(45, 62, 115, .92); transition: background-color .45s var(--ease-out); }
+@starting-style { .lightbox[open]::backdrop { background-color: rgba(45, 62, 115, 0); } }
+.lightbox__text, .lightbox__close, .lightbox__media > * { transition: opacity .3s; }
+.lightbox.is-flip::before, .lightbox.is-flip .lightbox__text, .lightbox.is-flip .lightbox__close, .lightbox.is-flip .lightbox__media > * { opacity: 0; }
+.lightbox.is-flip .lightbox__media { background: transparent; }
+.flip-fantome { position: fixed; left: 0; top: 0; z-index: 5; overflow: hidden; background: var(--navy); pointer-events: none; }
+.flip-fantome img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.flip-fantome .card__placeholder img { width: 38%; height: auto; }
+
+/* Curseur « VOIR » (souris ou pavé tactile uniquement) */
+.curseur { position: fixed; left: 0; top: 0; z-index: 60; width: 96px; height: 96px; margin: -48px 0 0 -48px; border-radius: 50%; background: var(--vert); color: var(--navy); display: grid; place-items: center; font: 800 14px/1 var(--font-titre); letter-spacing: .1em; text-transform: uppercase; pointer-events: none; }
+.has-curseur .card, .has-curseur .card__btn { cursor: none; }
+/* Carrousel : une photo à la fois, entière (contain), sur fond bleu foncé */
+.lightbox__media { position: relative; background: var(--navy); overflow: hidden; }
+.lightbox__media:focus-visible { outline: 3px solid var(--vert); outline-offset: -3px; }
+.carrousel__scene { position: relative; height: min(84vh, 720px); touch-action: pan-y; }
+.diapo { position: absolute; inset: 0; margin: 0; opacity: 0; visibility: hidden; }
+.diapo.is-active { opacity: 1; visibility: visible; }
+.diapo picture, .diapo img { display: block; width: 100%; height: 100%; }
+.diapo img { object-fit: contain; background-image: none !important; background-color: transparent !important; }
+.carrousel__scene > .card__placeholder { position: absolute; inset: 0; }
+.flip-repere { position: absolute; visibility: hidden; pointer-events: none; }
+.carrousel__btn { position: absolute; top: 50%; z-index: 2; width: 48px; height: 48px; margin-top: -24px; border: 0; background: rgba(45, 62, 115, .88); color: var(--white); font: 400 34px/1 var(--font-texte); cursor: pointer; transition: background-color .25s, color .25s; }
+.carrousel__btn:hover { background: var(--vert); color: var(--navy); }
+.carrousel__btn--prec { left: 12px; } .carrousel__btn--suiv { right: 12px; }
+.carrousel__compteur { position: absolute; left: 12px; bottom: 12px; z-index: 2; margin: 0; background: var(--navy); color: var(--white); font: 800 13px/1 var(--font-titre); letter-spacing: .08em; padding: 7px 9px 6px; }
+.lightbox .carrousel__btn:focus-visible { outline-color: var(--vert); } /* contour vert sur fond bleu foncé */
 .lightbox__text { padding: 34px 32px; overflow-y: auto; overscroll-behavior: contain; }
 .lightbox__date { display: inline-block; background: var(--vert); color: var(--navy); font: 800 14px/1 var(--font-titre); padding: 6px 9px 5px; text-transform: uppercase; letter-spacing: .04em; margin: 0; }
 .lightbox__title { font-family: var(--font-titre); font-weight: 800; text-transform: uppercase; color: var(--navy); font-size: clamp(24px, 2.4vw, 32px); line-height: 1.05; margin: 14px 0; text-wrap: balance; }
 .lightbox__nav { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
 .lightbox__close { position: absolute; right: 10px; top: 8px; z-index: 2; width: 44px; height: 44px; border: 0; background: var(--white); color: var(--navy); font-size: 32px; cursor: pointer; }
-@media (max-width: 860px) { .lightbox[open] { grid-template-columns: 1fr; overflow-y: auto; overscroll-behavior: contain; } .lightbox__media { max-height: none; } }
+@media (max-width: 860px) { .lightbox[open] { grid-template-columns: 1fr; overflow-y: auto; overscroll-behavior: contain; } .carrousel__scene { height: auto; aspect-ratio: 4 / 3; max-height: 58vh; } .carrousel__btn { width: 40px; height: 40px; margin-top: -20px; font-size: 28px; } }
 
 .noscript, .erreur { padding: 20px; text-align: center; }
 .erreur { margin: 0; background: #FFF4E0; color: var(--ink); font-weight: 500; }
+
+/* ---------- Lenis 1.3 (MIT, © darkroom.engineering) : règles de vendor/lenis/lenis.css reprises ici (une requête bloquante de moins) ---------- */
+html.lenis, html.lenis body { height: auto; }
+.lenis:not(.lenis-autoToggle).lenis-stopped { overflow: clip; }
+.lenis [data-lenis-prevent], .lenis [data-lenis-prevent-wheel], .lenis [data-lenis-prevent-touch], .lenis [data-lenis-prevent-vertical], .lenis [data-lenis-prevent-horizontal] { overscroll-behavior: contain; }
+.lenis.lenis-smooth iframe { pointer-events: none; }
+.lenis.lenis-autoToggle { transition-property: overflow; transition-duration: 1ms; transition-behavior: allow-discrete; }
 
 /* ---------- Mouvement réduit : tout est lisible sans animation ---------- */
 @media (prefers-reduced-motion: reduce) {

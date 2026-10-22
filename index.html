@@ -19,10 +19,11 @@
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Meilleurs vœux 2027 du 3e Régiment du Service militaire volontaire de La Rochelle">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="icon" href="assets/img/logos/insigne_3rsmv.png">
+  <link rel="icon" href="assets/img/logos/insigne_3rsmv_favicon.png">
+  <!-- Ce dont l'ouverture a besoin, chargé en parallèle des scripts : polices du titre et du sur-titre, contenus -->
   <link rel="preload" href="assets/fonts/Marianne-ExtraBold.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/Marianne-Regular.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="vendor/lenis/lenis.css">
+  <link rel="preload" href="assets/fonts/Marianne-Bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="content/site.json" as="fetch" crossorigin>
   <link rel="stylesheet" href="assets/css/site.css">
 </head>
 <body>
@@ -30,12 +31,19 @@
 
   <header class="topbar" data-topbar>
     <a class="topbar__brand" href="#voeux">
-      <img src="assets/img/logos/insigne_3rsmv.png" alt="" width="28" height="43">
+      <img src="assets/img/logos/insigne_3rsmv_56.webp" alt="" width="28" height="43">
       <span translate="no">3<sup>e</sup>&nbsp;RSMV · La&nbsp;Rochelle</span><span class="sr-only"> (retour en haut)</span>
     </a>
-    <nav class="topbar__nav" aria-label="Sections">
-      <a href="#chiffres">Chiffres</a><a href="#frise">2026</a><a href="#final">2027</a>
-    </nav>
+    <div class="topbar__droite">
+      <nav class="topbar__nav" aria-label="Sections">
+        <a href="#chiffres">Chiffres</a><a href="#frise">2026</a><a href="#final">2027</a>
+      </nav>
+      <!-- Son : coupé par défaut, jamais de lecture automatique. Les sons ne sont téléchargés qu'à l'activation. -->
+      <button class="topbar__son" type="button" aria-pressed="false" data-son>
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 9v6h4l5 4V5L7 9H3z" fill="currentColor"/><path class="topbar__ondes" d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span>Son</span>
+      </button>
+    </div>
   </header>
 
   <main id="contenu" tabindex="-1">
@@ -48,8 +56,9 @@
       </div>
       <div class="hero__inner">
         <div class="hero__insigne" data-hero-insigne>
-          <img src="assets/img/logos/insigne_3rsmv.png" alt="Insigne du 3e Régiment du Service militaire volontaire" width="188" height="289" fetchpriority="high">
+          <img src="assets/img/logos/insigne_3rsmv_300.webp" alt="Insigne du 3e Régiment du Service militaire volontaire" width="188" height="289">
         </div>
+        <p class="hero__pour" data-hero-pour hidden></p>
         <p class="hero__kicker" data-hero-kicker></p>
         <h1 class="hero__title" id="hero-title">
           <span class="sr-only">Meilleurs vœux 2027</span>
@@ -64,6 +73,7 @@
         <p class="hero__sub" data-hero-sub></p>
       </div>
       <a class="hero__cue" href="#chiffres" data-hero-cue><span>Découvrir 2026</span><i aria-hidden="true"></i></a>
+      <button class="hero__skip" type="button" data-skip hidden aria-label="Passer l’animation d’ouverture">Passer <span aria-hidden="true">›</span></button>
     </section>
 
     <!-- 2. CHIFFRES -->
@@ -114,7 +124,7 @@
 
   <dialog class="lightbox" data-lightbox aria-labelledby="lb-title">
     <button class="lightbox__close" type="button" data-lb-close aria-label="Fermer">×</button>
-    <div class="lightbox__media" data-lb-media></div>
+    <div class="lightbox__media" data-lb-media role="group" aria-label="Photos de l’événement" tabindex="-1"></div>
     <div class="lightbox__text">
       <p class="lightbox__date" data-lb-date></p>
       <h3 class="lightbox__title" id="lb-title" data-lb-title></h3>
@@ -132,6 +142,7 @@
   <script src="vendor/gsap/ScrollTrigger.min.js" defer></script>
   <script src="vendor/gsap/SplitText.min.js" defer></script>
   <script src="vendor/gsap/CustomEase.min.js" defer></script>
+  <script src="vendor/gsap/Flip.min.js" defer></script>
   <script src="vendor/lenis/lenis.min.js" defer></script>
   <script src="assets/js/camo-sprite.js" defer></script>
   <script src="assets/js/site.js" defer></script>
