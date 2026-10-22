@@ -273,9 +273,10 @@
       dlg.classList.add("is-flip", "is-fermeture");
       Flip.fit(f, media, { scale: false, duration: .55, ease: "smvInOut", onComplete: () => dlg.close() });
     };
+    // Un clic n'importe où sur la carte (photo, date, titre, texte) ouvre cette carte.
     document.addEventListener("click", (ev) => {
-      const b = ev.target.closest("[data-open]");
-      if (b) ouvrir(+b.dataset.open, b.closest("[data-card]"));
+      const carte = ev.target.closest("[data-card]"); if (!carte) return;
+      ouvrir(+$("[data-open]", carte).dataset.open, carte);
     });
     $("[data-lb-close]").onclick = fermer;
     $("[data-lb-prev]").onclick = () => { show(cur - 1); animerTexte(); };
@@ -430,8 +431,9 @@
         const visible = card.offsetLeft < window.innerWidth * .9;
         const st = (start) => visible ? { trigger: section, start: "top 65%" } : { trigger: card, containerAnimation: scroller, start };
         gsap.fromTo(media, { clipPath: "inset(0 0 100% 0)" }, { clipPath: "inset(0 0 0% 0)", duration: 1.1, ease: "smvOut", delay: visible ? i * .12 : 0, scrollTrigger: st("left 92%") });
+        // clearProps : aucune transformation ne reste sur le titre (sinon la zone cliquable de la carte se réduirait au titre)
         gsap.from($$(".card__meta, .card__title, .card__text, .card__more", card), { y: 24, opacity: 0, stagger: .06, duration: .8, ease: "smvOut",
-          delay: visible ? .2 + i * .12 : 0, scrollTrigger: st("left 85%") });
+          delay: visible ? .2 + i * .12 : 0, clearProps: "transform,opacity", scrollTrigger: st("left 85%") });
         if (img) gsap.fromTo(img, { xPercent: -6 }, { xPercent: 6, ease: "none",
           scrollTrigger: { trigger: card, containerAnimation: scroller, start: "left right", end: "right left", scrub: true } });
       });
@@ -450,7 +452,7 @@
     mm.add("(max-width: 899px)", () => {
       section.classList.add("is-vertical");
       gsap.fromTo(track, { "--line": 0 }, { "--line": 1, ease: "none", scrollTrigger: { trigger: track, start: "top 70%", end: "bottom 80%", scrub: true } });
-      ScrollTrigger.batch("[data-card]", { start: "top 88%", onEnter: (b) => gsap.from(b, { y: 50, opacity: 0, duration: .9, stagger: .1, ease: "smvOut" }) });
+      ScrollTrigger.batch("[data-card]", { start: "top 88%", onEnter: (b) => gsap.from(b, { y: 50, opacity: 0, duration: .9, stagger: .1, ease: "smvOut", clearProps: "transform,opacity" }) });
     });
   }
 
